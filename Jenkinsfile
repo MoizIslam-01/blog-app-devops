@@ -3,6 +3,8 @@ pipeline {
 
     environment {
         DOCKER_HOST = 'unix:///var/run/docker.sock'
+        VITE_SUPABASE_URL = 'https://prhsliwzscnekhpbnwnq.supabase.co'
+        VITE_SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InByaHNsaXd6c2NuZWtocGJud25xIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjI3MDI3OTksImV4cCI6MjA3ODI3ODc5OX0.4XwTD491YO55bad5--ywf5RJqnGZuEkULkluaHfVneU'
     }
 
     stages {
@@ -13,19 +15,25 @@ pipeline {
             }
         }
 
-        stage('Build and Deploy') {
-    steps {
-        script {
-            sh '''
-                pwd
-                ls -la
-                docker-compose down || true
-                docker rm -f blog-app-devops_blog-app_1 || true
-                docker-compose up --build -d
-            '''
+        stage('Create Environment File') {
+            steps {
+                sh '''
+                    echo "VITE_SUPABASE_URL=${VITE_SUPABASE_URL}" > .env
+                    echo "VITE_SUPABASE_ANON_KEY=${VITE_SUPABASE_ANON_KEY}" >> .env
+                    cat .env
+                '''
+            }
         }
-    }
-}
+
+        stage('Build and Deploy') {
+            steps {
+                script {
+                    sh 'docker-compose down || true'
+                    sh 'docker rm -f blog-app-devops_blog-app_1 || true'
+                    sh 'docker-compose up --build -d'
+                }
+            }
+        }
 
         stage('Verify') {
             steps {
