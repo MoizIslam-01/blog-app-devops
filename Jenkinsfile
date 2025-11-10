@@ -23,13 +23,13 @@ pipeline {
             }
         }
 
-        stage('Verify') {
-            steps {
-                script {
-                    sleep time: 30, unit: 'SECONDS'
-                    sh 'curl -f http://localhost:3001 || exit 1'
-                }
-            }
+  stage('Verify') {
+    steps {
+        script {
+            sleep time: 30, unit: 'SECONDS'
+            sh 'curl -f http://localhost:3001 || exit 1'
         }
+    }
+}
     }
 }
