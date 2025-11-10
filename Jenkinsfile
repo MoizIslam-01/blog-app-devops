@@ -15,16 +15,6 @@ pipeline {
             }
         }
 
-        stage('Create Environment File') {
-            steps {
-                sh '''
-                    echo "VITE_SUPABASE_URL=${VITE_SUPABASE_URL}" > .env
-                    echo "VITE_SUPABASE_ANON_KEY=${VITE_SUPABASE_ANON_KEY}" >> .env
-                    cat .env
-                '''
-            }
-        }
-
         stage('Build and Deploy') {
             steps {
                 script {
