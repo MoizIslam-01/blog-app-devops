@@ -14,14 +14,18 @@ pipeline {
         }
 
         stage('Build and Deploy') {
-            steps {
-                script {
-                    sh 'docker-compose down || true'
-                    sh 'docker rm -f blog-app-devops_blog-app_1 || true'
-                    sh 'docker-compose up --build -d'
-                }
-            }
+    steps {
+        script {
+            sh '''
+                pwd
+                ls -la
+                docker-compose down || true
+                docker rm -f blog-app-devops_blog-app_1 || true
+                docker-compose up --build -d
+            '''
         }
+    }
+}
 
         stage('Verify') {
             steps {
